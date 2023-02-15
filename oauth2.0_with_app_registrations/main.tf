@@ -24,4 +24,6 @@ data "http" "icanhazip" {
 
 module "oauth2" {
   source = "./modules/oauth2"
+
+  apim_oauth2_scope = "apim"
 }

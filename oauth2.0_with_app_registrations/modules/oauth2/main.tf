@@ -2,13 +2,15 @@ resource "random_uuid" "test_oauth2_permission_scope_id" {}
 
 resource "azuread_application" "server" {
   display_name = "test-server"
-  identifier_uris = ["api://example-app"] # Application ID URI
+  identifier_uris = [
+    "api://example-app", 
+  ] # Application ID URI
 
   api {
     requested_access_token_version = 2
 
     oauth2_permission_scope {
-      value = "test"
+      value = var.apim_oauth2_scope
       admin_consent_description = "Allow API Invoke"
       admin_consent_display_name = "Allow API Invoke"
       id = random_uuid.test_oauth2_permission_scope_id.result
@@ -43,9 +45,41 @@ resource "azuread_application_pre_authorized" "client" {
   permission_ids = [ random_uuid.test_oauth2_permission_scope_id.result ]
 }
 
-# data "azuread_application" "server" {
-#   depends_on = [
-#     azuread_application.server
-#   ]
-#   display_name = "test-server"
-# }
+data "azurerm_api_management" "example" {
+  name = "jerome-test-apim"
+  resource_group_name = "jerome-test-env"
+}
+
+resource "azurerm_api_management_authorization_server" "example" {
+  api_management_name = data.azurerm_api_management.example.name
+  resource_group_name = data.azurerm_api_management.example.resource_group_name
+
+  name = "test"
+  display_name = "test"
+  
+  client_registration_endpoint = "https://localhost"
+  grant_types = [ 
+    "authorizationCode", 
+  ]
+  authorization_endpoint = "https://login.microsoftonline.com/482e292f-548d-4e7d-b44c-1cdb1a86cb49/oauth2/v2.0/authorize"
+  authorization_methods = [ 
+    "GET",
+  ]
+  token_endpoint = "https://login.microsoftonline.com/482e292f-548d-4e7d-b44c-1cdb1a86cb49/oauth2/v2.0/token"
+
+  client_authentication_method = [ 
+    "Body", 
+  ]
+
+  bearer_token_sending_methods = [
+    "authorizationHeader",
+  ]
+
+  default_scope = "${tolist(azuread_application.server.identifier_uris)[0]}/${var.apim_oauth2_scope}"
+  client_id = azuread_application.client.application_id
+  client_secret = "secret_in_place"
+}
+
+data "azuread_application" "server" {
+  application_id = azuread_application.server.application_id
+}

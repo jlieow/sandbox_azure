@@ -1,0 +1,1 @@
+variable "apim_oauth2_scope" {}
