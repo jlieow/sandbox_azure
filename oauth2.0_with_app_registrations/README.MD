@@ -1,8 +1,8 @@
 ### Objective
 
-Terraform used to provision 2 App Registrations with settings to configure one as a Server and Client for OAuth2.0 operation. In addition, it configures an APIM to use the Server as the authorisation server to protect its resources.
+Terraform used to provision 2 App Registrations with settings to configure one as a Server and Client for OAuth2.0 operation. In addition, it configures an APIM to use the Server as the authorization server to protect its resources.
 
-Server: Resource authorisation server. Contains and OAuth scope which controls access to the resources.
+Server: Resource authorization server. Contains and OAuth scope which controls access to the resources.
 CLient: Application authorized by the server to access the resource through the OAuth scope.
 
 ### About
@@ -86,7 +86,7 @@ Instructions to enable OAuth 2.0 for APIM
         <issuer>https://sts.windows.net/{TENANT_ID}/</issuer>
     </issuers>
     <required-claims>
-        <claim name="aud">
+        <claim name="NAME" match="any">
             <value>{SERVER_APP_REGISTRATION_CLIENT_ID}</value>
         </claim>
     </required-claims>
