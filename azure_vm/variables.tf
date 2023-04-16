@@ -16,8 +16,6 @@ variable "key" {
   description = "Name of tf state file to be saved. ONLY USED IN backend.tf."
 }
 
-## config.tfvars
-
 variable "subscription_id" {
   description = "Subscription ID."
 }
@@ -25,3 +23,5 @@ variable "subscription_id" {
 variable "tenant_id" {
   description = "Tenant ID."
 }
+
+## config.tfvars
