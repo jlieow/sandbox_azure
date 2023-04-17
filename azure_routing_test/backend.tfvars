@@ -1,0 +1,6 @@
+resource_group_name     = "jerome-testing-rg"
+storage_account_name    = "jerometerraformstate"
+container_name          = "tfstate"
+key                     = "terraform.tfstate"
+subscription_id         = "2c964fb7-4cdf-421e-8cdf-54cd2e2cc6b5"
+tenant_id               = "482e292f-548d-4e7d-b44c-1cdb1a86cb49"
