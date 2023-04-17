@@ -1,5 +1,3 @@
-backend.tfvars
-config.tfvars
 spoke.tfvars
 combine.tfvars
 settings.tfvars
