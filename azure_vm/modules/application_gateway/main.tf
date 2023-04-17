@@ -11,7 +11,8 @@ resource "azurerm_public_ip" "agw" {
   name                = "AgwPublicIp1"
   location            = var.azurerm_resource_group_location
   resource_group_name = var.azurerm_resource_group_name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
+  sku = "Standard"
 
   tags = {
     Name = "AgwPublicIp1"
@@ -24,8 +25,8 @@ resource "azurerm_application_gateway" "network" {
   resource_group_name = var.azurerm_resource_group_name
 
   sku {
-    name     = "Standard_Small"
-    tier     = "Standard"
+    name     = "Standard_v2"
+    tier     = "Standard_v2"
     capacity = 2
   }
 
@@ -51,7 +52,7 @@ resource "azurerm_application_gateway" "network" {
   backend_http_settings {
     name                  = local.http_setting_name
     cookie_based_affinity = "Disabled"
-    path                  = "/path1/"
+    # path                  = "/path1/"
     port                  = 80
     protocol              = "Http"
     request_timeout       = 60
