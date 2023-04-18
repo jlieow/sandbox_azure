@@ -17,6 +17,15 @@ provider "azurerm" {
   tenant_id       = var.tenant_id
 }
 
+provider "azurerm" {
+  features {}
+
+  alias  = "firewall"
+
+  subscription_id = "ec7b9715-07aa-4f85-9b36-0c5f31744b16"
+  tenant_id       = var.tenant_id
+}
+
 # Get local IP address
 data "http" "icanhazip" {
    url = "https://ipv4.icanhazip.com/"
@@ -26,56 +35,65 @@ data "azurerm_resource_group" "jerome_testing_rg" {
   name = "jerome-testing-rg"
 }
 
-module "vpc" {
-  source = "./modules/vpc"
+# module "vpc" {
+#   source = "./modules/vpc"
 
-  azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
-  azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
-}
+#   azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
+#   azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
+# }
 
-module "subnet" {
-  source = "./modules/subnet"
+# module "subnet" {
+#   source = "./modules/subnet"
 
-  azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
-  azurerm_virtual_network_name = module.vpc.azurerm_virtual_network_name
-}
+#   azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
+#   azurerm_virtual_network_name = module.vpc.azurerm_virtual_network_name
+# }
 
-module "vm_a" {
-  source = "./modules/vm"
+# module "vm_a" {
+#   source = "./modules/vm"
 
-  prefix = "vm_a"
-  azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
-  azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
+#   prefix = "vm_a"
+#   azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
+#   azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
 
-  azurerm_subnet_id = module.subnet.subnet_a_id
-}
+#   azurerm_subnet_id = module.subnet.subnet_a_id
+# }
 
-module "vm_b" {
-  source = "./modules/vm"
+# module "vm_b" {
+#   source = "./modules/vm"
 
-  prefix = "vm_b"
-  azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
-  azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
+#   prefix = "vm_b"
+#   azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
+#   azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
 
-  azurerm_subnet_id = module.subnet.subnet_b_id
-}
+#   azurerm_subnet_id = module.subnet.subnet_b_id
+# }
 
-module "vm_c" {
-  source = "./modules/vm"
+# module "vm_c" {
+#   source = "./modules/vm"
 
-  prefix = "vm_c"
-  azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
-  azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
+#   prefix = "vm_c"
+#   azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
+#   azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
 
-  azurerm_subnet_id = module.subnet.subnet_c_id
-}
+#   azurerm_subnet_id = module.subnet.subnet_c_id
+# }
 
-module "route_table" {
-  source = "./modules/route_table"
+# module "route_table" {
+#   source = "./modules/route_table"
 
-  azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
-  azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
+#   azurerm_resource_group_location = data.azurerm_resource_group.jerome_testing_rg.location
+#   azurerm_resource_group_name = data.azurerm_resource_group.jerome_testing_rg.name
 
-  azurerm_subnet_id = module.subnet.subnet_a_id
+#   azurerm_subnet_id = module.subnet.subnet_a_id
 
+# }
+
+module "data" {
+
+  providers = {
+    azurerm = azurerm.firewall
+  }
+
+  source = "./modules/data"
 }
